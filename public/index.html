@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
     <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Jiro Tier" />
     <meta
       name="description"
       content="ラーメン屋さんのTierリストを表示するアプリケーション"
@@ -13,6 +16,32 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
     <title>Jiro Tier</title>
+    <style>
+      /* iPhoneでの安全領域対応 */
+      body {
+        margin: 0;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        min-height: 100vh;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* タッチ操作の改善 */
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* スクロールの改善 */
+      html, body {
+        overflow-x: hidden;
+        position: relative;
+      }
+    </style>
   </head>
   <body>
     <noscript>このアプリケーションを実行するにはJavaScriptを有効にする必要があります。</noscript>
