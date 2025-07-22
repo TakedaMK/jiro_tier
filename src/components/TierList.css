@@ -61,6 +61,13 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   text-align: center;
   display: inline-block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .restaurant-item .ramen-red {
@@ -77,7 +84,6 @@
   cursor: grabbing;
   transform: scale(1.05);
 }
-
 
 .tier-content.drag-over {
   background-color: rgba(230, 230, 210, 0.1);
@@ -140,6 +146,68 @@
   margin-bottom: 4px;
 }
 
+/* EXの特別なスタイル */
+.tier-row[data-tier="EX"] {
+  border-width: 4px;
+  border-style: double;
+  background: linear-gradient(135deg, #FF1493, #FF69B4);
+  box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+  animation: exGlow 2s ease-in-out infinite alternate;
+}
+
+.tier-row[data-tier="EX"] .tier-label {
+  background: linear-gradient(135deg, #FF1493, #FF69B4);
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.8);
+}
+
+.tier-row[data-tier="EX"] .restaurant-item {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border: 2px solid #FF1493;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  font-weight: 900;
+  color: #000;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes exGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
+  }
+}
+
+/* EXのドラッグ制限の視覚的フィードバック */
+.tier-row[data-tier="EX"].drag-over {
+  animation: exGlow 0.5s ease-in-out infinite alternate;
+  border-color: #FFD700 !important;
+}
+
+/* 三田の特別なスタイル */
+.restaurant-item[data-name="三田"] {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  border: 3px solid #FF1493 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+  font-weight: 900 !important;
+  color: #000 !important;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+}
+
+.restaurant-item[data-name="三田"]::before {
+  content: "★";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  color: #FF1493;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
   .tier-list {
@@ -176,6 +244,24 @@
   .restaurant-item {
     padding: 12px 16px;
     font-size: 1rem;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .restaurant-item:active {
+    transform: scale(1.02);
+    transition: transform 0.1s ease;
+  }
+
+  .restaurant-item.dragging {
+    transform: scale(1.05);
+    opacity: 0.8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   .tier-header {
@@ -184,7 +270,28 @@
   }
 
   .tier-content {
-    min-height: 120px;
+    /* min-height: 120px; */
     padding: 15px;
   }
+
+  .tier-row {
+    touch-action: pan-y;
+  }
+}
+
+/* iPhoneでの安全領域対応 */
+@supports (padding: max(0px)) {
+  .tier-list-container {
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+
+.tier-row.drag-over {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ff6b6b !important;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
