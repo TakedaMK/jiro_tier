@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/jiro_tier/static/css/main.5aeb5e3e.css",
+    "main.js": "/jiro_tier/static/js/main.4a588b64.js",
+    "index.html": "/jiro_tier/index.html",
+    "main.5aeb5e3e.css.map": "/jiro_tier/static/css/main.5aeb5e3e.css.map",
+    "main.4a588b64.js.map": "/jiro_tier/static/js/main.4a588b64.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5aeb5e3e.css",
+    "static/js/main.4a588b64.js"
+  ]
+}
