@@ -17,7 +17,6 @@ const TIERS: Tier[] = [
   { name: 'SSS', color: '#FFD700' },
   { name: 'SS', color: '#C0C0C0' },
   { name: 'S', color: '#FF6B6B' },
-  { name: 'A+', color: '#4ECDC4' },
   { name: 'A', color: '#45B7D1' },
   { name: 'A-', color: '#96CEB4' },
   { name: 'B', color: '#FFEAA7' },
@@ -75,6 +74,7 @@ const TierList: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>(INITIAL_RESTAURANTS);
   const [draggedItem, setDraggedItem] = useState<Restaurant | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragOverTarget, setDragOverTarget] = useState<string | null>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const tierListRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +87,40 @@ const TierList: React.FC = () => {
   const handleDragEnd = () => {
     setIsDragging(false);
     setDraggedItem(null);
+    setDragOverTarget(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetTier: string, targetIndex?: number) => {
+    e.preventDefault();
+    if (draggedItem) {
+      setRestaurants(prev => {
+        const newRestaurants = [...prev];
+        const draggedIndex = newRestaurants.findIndex(r => r.id === draggedItem.id);
+
+        // 同じTier内での順番変更
+        if (draggedItem.tier === targetTier) {
+          const tierRestaurants = newRestaurants.filter(r => r.tier === targetTier);
+          const currentIndex = tierRestaurants.findIndex(r => r.id === draggedItem.id);
+
+          // 新しい順番を計算
+          let newIndex = targetIndex !== undefined ? targetIndex : tierRestaurants.length - 1;
+          if (newIndex > currentIndex) newIndex--;
+
+          // 順番を変更
+          const reorderedTier = [...tierRestaurants];
+          const [movedItem] = reorderedTier.splice(currentIndex, 1);
+          reorderedTier.splice(newIndex, 0, movedItem);
+
+          // 新しい配列を作成
+          const otherTiers = newRestaurants.filter(r => r.tier !== targetTier);
+          return [...otherTiers, ...reorderedTier];
+        } else {
+          // 異なるTier間での移動
+          newRestaurants[draggedIndex] = { ...draggedItem, tier: targetTier };
+          return newRestaurants;
+        }
+      });
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -94,16 +128,25 @@ const TierList: React.FC = () => {
     e.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDrop = (e: React.DragEvent, targetTier: string) => {
+  const handleDragOverRestaurant = (e: React.DragEvent, restaurant: Restaurant) => {
     e.preventDefault();
-    if (draggedItem) {
-      setRestaurants(prev =>
-        prev.map(restaurant =>
-          restaurant.id === draggedItem.id
-            ? { ...restaurant, tier: targetTier }
-            : restaurant
-        )
-      );
+    if (draggedItem && draggedItem.id !== restaurant.id) {
+      setDragOverTarget(restaurant.id);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setDragOverTarget(null);
+  };
+
+  const handleDropOnRestaurant = (e: React.DragEvent, targetRestaurant: Restaurant) => {
+    e.preventDefault();
+    if (draggedItem && draggedItem.id !== targetRestaurant.id) {
+      const targetTier = targetRestaurant.tier;
+      const tierRestaurants = restaurants.filter(r => r.tier === targetTier);
+      const targetIndex = tierRestaurants.findIndex(r => r.id === targetRestaurant.id);
+
+      handleDrop(e, targetTier, targetIndex);
     }
   };
 
@@ -206,11 +249,14 @@ const TierList: React.FC = () => {
                   return (
                     <div
                       key={restaurant.id}
-                      className={`restaurant-item`}
+                      className={`restaurant-item ${isDragging && draggedItem?.id === restaurant.id ? 'dragging' : ''} ${dragOverTarget === restaurant.id ? 'drop-target' : ''}`}
                       draggable
                       onDragStart={(e) => handleDragStart(e, restaurant)}
                       onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOverRestaurant(e, restaurant)}
+                      onDragLeave={handleDragLeave}
                       onTouchStart={(e) => handleTouchStart(e, restaurant)}
+                      onDrop={(e) => handleDropOnRestaurant(e, restaurant)}
                       ref={dragRef}
                     >
                       {displayName}
