@@ -68,6 +68,8 @@
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 2;
 }
 
 .restaurant-item .ramen-red {
@@ -95,10 +97,13 @@
   background-color: rgba(255, 107, 107, 0.1);
 }
 
+/* ドラッグアンドドロップの安定性向上 */
 .tier-list-vertical {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0px;
+  min-height: 100vh;
+  position: relative;
 }
 
 .tier-row {
@@ -106,9 +111,20 @@
   align-items: center;
   border: 3px solid;
   background-color: #222;
-  min-height: 60px;
-  margin: 0 0 4px 0;
+  min-height: 80px;
+  margin: 0;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tier-row.drag-over {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ff6b6b !important;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+  z-index: 10;
 }
 
 .tier-label {
@@ -123,6 +139,7 @@
   color: #fff;
   margin-right: 8px;
   box-shadow: 1px 0 4px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 
 .tier-content {
@@ -133,6 +150,56 @@
   padding: 8px 0;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
+  position: relative;
+}
+
+.restaurant-item {
+  font-family: 'Noto Sans JP', 'Arial Black', 'Meiryo', sans-serif;
+  font-weight: 900;
+  font-size: 1.3rem;
+  background-color: white;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: inline-block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.restaurant-item .ramen-red {
+  color: #ff0000;
+  font-weight: 900;
+}
+
+.restaurant-item .ramen-black {
+  color: #111;
+  font-weight: 900;
+}
+
+.restaurant-item:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.restaurant-item.dragging {
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: rotate(5deg) scale(1.05);
+  transition: all 0.2s ease;
+  opacity: 0.8;
 }
 
 .tier-row .restaurant-item {
@@ -144,68 +211,6 @@
   text-align: center;
   white-space: nowrap;
   margin-bottom: 4px;
-}
-
-/* EXの特別なスタイル */
-.tier-row[data-tier="EX"] {
-  border-width: 4px;
-  border-style: double;
-  background: linear-gradient(135deg, #FF1493, #FF69B4);
-  box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-  animation: exGlow 2s ease-in-out infinite alternate;
-}
-
-.tier-row[data-tier="EX"] .tier-label {
-  background: linear-gradient(135deg, #FF1493, #FF69B4);
-  font-size: 1.5rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 15px rgba(255, 20, 147, 0.8);
-}
-
-.tier-row[data-tier="EX"] .restaurant-item {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-  border: 2px solid #FF1493;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  font-weight: 900;
-  color: #000;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-}
-
-@keyframes exGlow {
-  0% {
-    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
-  }
-}
-
-/* EXのドラッグ制限の視覚的フィードバック */
-.tier-row[data-tier="EX"].drag-over {
-  animation: exGlow 0.5s ease-in-out infinite alternate;
-  border-color: #FFD700 !important;
-}
-
-/* 三田の特別なスタイル */
-.restaurant-item[data-name="三田"] {
-  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
-  border: 3px solid #FF1493 !important;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
-  font-weight: 900 !important;
-  color: #000 !important;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
-  position: relative;
-}
-
-.restaurant-item[data-name="三田"]::before {
-  content: "★";
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  color: #FF1493;
-  font-size: 1.2rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* レスポンシブデザイン */
@@ -270,7 +275,7 @@
   }
 
   .tier-content {
-    /* min-height: 120px; */
+    min-height: 120px;
     padding: 15px;
   }
 
@@ -289,9 +294,64 @@
   }
 }
 
-.tier-row.drag-over {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: #ff6b6b !important;
-  transform: scale(1.02);
-  transition: all 0.2s ease;
+/* EXの特別なスタイル */
+.tier-row[data-tier="EX"] {
+  border-width: 4px;
+  border-style: double;
+  background: linear-gradient(135deg, #FF1493, #FF69B4);
+  box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+  animation: exGlow 2s ease-in-out infinite alternate;
+}
+
+.tier-row[data-tier="EX"] .tier-label {
+  background: linear-gradient(135deg, #FF1493, #FF69B4);
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.8);
+}
+
+.tier-row[data-tier="EX"] .restaurant-item {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border: 2px solid #FF1493;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  font-weight: 900;
+  color: #000;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes exGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
+  }
+}
+
+/* EXのドラッグ制限の視覚的フィードバック */
+.tier-row[data-tier="EX"].drag-over {
+  animation: exGlow 0.5s ease-in-out infinite alternate;
+  border-color: #FFD700 !important;
+}
+
+/* 三田の特別なスタイル */
+.restaurant-item[data-name="三田"] {
+  background: linear-gradient(135deg, #FFD700, #FFA500) !important;
+  border: 3px solid #FF1493 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8) !important;
+  font-weight: 900 !important;
+  color: #000 !important;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+}
+
+.restaurant-item[data-name="三田"]::before {
+  content: "★";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  color: #FF1493;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
