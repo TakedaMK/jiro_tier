@@ -17,7 +17,6 @@ import {
   arrayMove
 } from '@dnd-kit/sortable';
 import { Restaurant, TIERS, INITIAL_RESTAURANTS } from './types';
-import { checkEXRestrictions } from './utils';
 import { DroppableTier } from './TierComponent';
 import { SortableRestaurantItem, DraggingRestaurantItem } from './RestaurantItem';
 import SaveButton from './SaveButton';
@@ -28,124 +27,119 @@ const TierList: React.FC = () => {
   const [activeRestaurant, setActiveRestaurant] = useState<Restaurant | null>(null);
   const tierListRef = useRef<HTMLDivElement>(null);
 
-  // センサーの設定（タッチとポインター）
+  // センサーの設定
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 3, // より敏感に
+        distance: 3,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150, // より早く
-        tolerance: 2, // より敏感に
+        delay: 150,
+        tolerance: 2,
       },
     })
   );
 
+  // ドラッグ開始時の処理
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const draggedRestaurant = restaurants.find(r => r.id === active.id);
     if (draggedRestaurant) {
       setActiveRestaurant(draggedRestaurant);
-      console.log('Drag start:', draggedRestaurant.name); // デバッグ用
+      console.log('Drag start:', draggedRestaurant.name);
     }
   };
 
+  // ドラッグ終了時の処理
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    console.log('Drag end - active:', active.id, 'over:', over?.id); // デバッグ用
 
+    console.log('Drag end - active:', active.id, 'over:', over?.id);
+
+    // 必ずactiveRestaurantをクリア
     setActiveRestaurant(null);
 
-    // ドロップ先が見つからない場合は何もしない（アイテムを削除しない）
     if (!over) {
-      console.log('No drop target - keeping item in place'); // デバッグ用
+      console.log('No valid drop target');
       return;
     }
 
     const draggedRestaurant = restaurants.find(r => r.id === active.id);
-    if (!draggedRestaurant) {
-      console.log('Dragged restaurant not found'); // デバッグ用
-      return;
-    }
-
-    // ドロップ先が有効なTierかチェック
-    const validTiers = TIERS.map(tier => tier.name);
     const targetTier = over.id as string;
 
-    // 無効なドロップ先の場合は何もしない
-    if (!validTiers.includes(targetTier)) {
-      console.log('Invalid drop target:', targetTier, '- keeping item in place'); // デバッグ用
+    if (!draggedRestaurant) {
+      console.log('Dragged restaurant not found');
       return;
     }
 
-    console.log('Target tier:', targetTier); // デバッグ用
-
-    // EXの特別な制限をチェック
-    if (!checkEXRestrictions(draggedRestaurant, targetTier)) {
-      console.log('EX restrictions applied'); // デバッグ用
+    // 三田の場合は移動を無効化
+    if (draggedRestaurant.name === '三田') {
+      console.log('三田は移動できません');
       return;
     }
 
     // 同じTier内での移動
     if (draggedRestaurant.tier === targetTier) {
-      console.log('Same tier movement'); // デバッグ用
       const tierRestaurants = restaurants.filter(r => r.tier === targetTier);
       const oldIndex = tierRestaurants.findIndex(r => r.id === active.id);
       const newIndex = tierRestaurants.findIndex(r => r.id === over.id);
 
-      console.log('Old index:', oldIndex, 'New index:', newIndex); // デバッグ用
+      console.log('Same tier - oldIndex:', oldIndex, 'newIndex:', newIndex);
 
-      if (oldIndex !== newIndex && oldIndex !== -1 && newIndex !== -1) {
+      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+        // 同じTier内での並び替え
         const newTierRestaurants = arrayMove(tierRestaurants, oldIndex, newIndex);
-        const otherTiers = restaurants.filter(r => r.tier !== targetTier);
-        const newRestaurants = [...otherTiers, ...newTierRestaurants];
-        console.log('Updating restaurants for same tier'); // デバッグ用
+        const otherRestaurants = restaurants.filter(r => r.tier !== targetTier);
+        const newRestaurants = [...otherRestaurants, ...newTierRestaurants];
+
+        console.log('Updating same tier order');
         setRestaurants(newRestaurants);
       }
     } else {
-      // 異なるTier間での移動
-      console.log('Different tier movement'); // デバッグ用
-      const newRestaurants = restaurants.map(restaurant =>
-        restaurant.id === active.id
-          ? { ...restaurant, tier: targetTier }
-          : restaurant
-      );
-      console.log('Updating restaurants for different tier'); // デバッグ用
-      setRestaurants(newRestaurants);
+      // 異なるTierへの移動
+      console.log('Cross tier move:', draggedRestaurant.name, '->', targetTier);
+
+      const updatedRestaurants = restaurants.map(restaurant => {
+        if (restaurant.id === active.id) {
+          return { ...restaurant, tier: targetTier };
+        }
+        return restaurant;
+      });
+
+      setRestaurants(updatedRestaurants);
     }
   };
 
-  // ドラッグオーバー時の処理を追加
+  // ドラッグオーバー時の処理
   const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
+    const { over } = event;
     if (over) {
-      console.log('Drag over:', active.id, '->', over.id); // デバッグ用
+      console.log('Drag over:', over.id);
     }
   };
 
   return (
     <div className="tier-list-container">
-      <SaveButton tierListRef={tierListRef} />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
-        // ドロップ可能エリア外でのドロップを防ぐ
+        onDragOver={handleDragOver}
         modifiers={[]}
       >
-                  <div className="tier-list-vertical" ref={tierListRef}>
-            {TIERS.map((tier) => (
-              <DroppableTier key={tier.name} tier={tier} restaurants={restaurants} />
-            ))}
-          </div>
-          <DragOverlay>
-            {activeRestaurant ? <DraggingRestaurantItem restaurant={activeRestaurant} /> : null}
-          </DragOverlay>
+        <div className="tier-list-vertical" ref={tierListRef}>
+          {TIERS.map((tier) => (
+            <DroppableTier key={tier.name} tier={tier} restaurants={restaurants} />
+          ))}
+        </div>
+        <DragOverlay>
+          {activeRestaurant ? <DraggingRestaurantItem restaurant={activeRestaurant} /> : null}
+        </DragOverlay>
       </DndContext>
+      <SaveButton tierListRef={tierListRef} />
     </div>
   );
 };

@@ -10,27 +10,36 @@ interface TierComponentProps {
 }
 
 export const DroppableTier: React.FC<TierComponentProps> = ({ tier, restaurants }) => {
+  // TierEXの場合はドロップ機能を無効化
+  const isEX = tier.name === 'EX';
+
   const { setNodeRef, isOver } = useDroppable({
     id: tier.name,
+    disabled: isEX, // TierEXの場合は無効化
   });
 
   const tierRestaurants = restaurants.filter(restaurant => restaurant.tier === tier.name);
 
+  // ドラッグ可能なアイテムのみをフィルタリング
+  const draggableItems = tierRestaurants
+    .filter(restaurant => restaurant.name !== '三田')
+    .map(restaurant => restaurant.id);
+
   return (
     <div
       ref={setNodeRef}
-      className={`tier-row ${isOver ? 'drag-over' : ''}`}
+      className={`tier-row ${isOver && !isEX ? 'drag-over' : ''}`}
       style={{
         borderColor: tier.color,
         minHeight: '80px', // 最小高さを増加
         position: 'relative', // 位置を相対に
         // ドロップ可能エリアを明確にする
-        cursor: isOver ? 'pointer' : 'default',
+        cursor: isOver && !isEX ? 'pointer' : 'default',
       }}
       data-tier={tier.name}
       data-testid={`tier-${tier.name}`} // テスト用ID
       // ドロップ可能エリアの範囲を明確にする
-      data-droppable="true"
+      data-droppable={!isEX ? "true" : "false"}
     >
       <div className="tier-label" style={{ backgroundColor: tier.color }}>
         {tier.name}
@@ -45,18 +54,18 @@ export const DroppableTier: React.FC<TierComponentProps> = ({ tier, restaurants 
           gap: '8px',
           alignItems: 'flex-start',
           // ドロップ可能エリアを明確にする
-          backgroundColor: isOver ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+          backgroundColor: isOver && !isEX ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
           borderRadius: '4px',
           transition: 'background-color 0.2s ease',
         }}
       >
-        <SortableContext items={tierRestaurants.map(r => r.id)} strategy={verticalListSortingStrategy}>
+        <SortableContext items={draggableItems} strategy={verticalListSortingStrategy}>
           {tierRestaurants.map(restaurant => (
             <SortableRestaurantItem key={restaurant.id} restaurant={restaurant} />
           ))}
         </SortableContext>
-        {/* 空のTierの場合のプレースホルダー */}
-        {tierRestaurants.length === 0 && (
+        {/* 空のTierの場合のプレースホルダー（EX以外のみ） */}
+        {tierRestaurants.length === 0 && !isEX && (
           <div
             style={{
               width: '100%',

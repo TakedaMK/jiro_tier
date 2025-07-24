@@ -23,6 +23,9 @@ const formatRestaurantName = (name: string) => {
 };
 
 export const SortableRestaurantItem: React.FC<RestaurantItemProps> = ({ restaurant }) => {
+  // 三田の場合はドラッグアンドドロップを無効化
+  const isFixed = restaurant.name === '三田';
+
   const {
     attributes,
     listeners,
@@ -32,12 +35,13 @@ export const SortableRestaurantItem: React.FC<RestaurantItemProps> = ({ restaura
     isDragging,
   } = useSortable({
     id: restaurant.id,
+    disabled: isFixed, // 三田の場合は無効化
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: isDragging ? 'grabbing' : 'grab',
+    cursor: isFixed ? 'default' : (isDragging ? 'grabbing' : 'grab'),
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 1000 : 'auto',
     position: isDragging ? 'relative' as const : 'static' as const,
@@ -47,12 +51,12 @@ export const SortableRestaurantItem: React.FC<RestaurantItemProps> = ({ restaura
     <div
       ref={setNodeRef}
       style={style}
-      className={`restaurant-item ${isDragging ? 'dragging' : ''}`}
+      className={`restaurant-item ${isDragging ? 'dragging' : ''} ${isFixed ? 'fixed-item' : ''}`}
       data-name={restaurant.name}
       data-id={restaurant.id}
       data-tier={restaurant.tier}
-      {...attributes}
-      {...listeners}
+      {...(isFixed ? {} : attributes)}
+      {...(isFixed ? {} : listeners)}
       onMouseDown={() => console.log('Mouse down on:', restaurant.name)} // デバッグ用
       onTouchStart={() => console.log('Touch start on:', restaurant.name)} // デバッグ用
     >
