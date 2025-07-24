@@ -14,6 +14,7 @@ export const TIERS: Tier[] = [
   { name: 'SSS', color: '#FFD700' },
   { name: 'SS', color: '#C0C0C0' },
   { name: 'S', color: '#FF6B6B' },
+  { name: 'A+', color: '#FF8C00' },
   { name: 'A', color: '#45B7D1' },
   { name: 'A-', color: '#96CEB4' },
   { name: 'B', color: '#FFEAA7' },

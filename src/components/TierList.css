@@ -418,6 +418,21 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
+/* 固定アイテム（三田）のスタイル */
+.restaurant-item.fixed-item {
+  cursor: default !important;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.restaurant-item.fixed-item:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* 保存ボタン関連のスタイル */
 .save-buttons {
   display: flex;
