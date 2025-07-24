@@ -1,23 +1,27 @@
 import React, { useState, useRef } from 'react';
-import '../TierList.css';
 import {
   DndContext,
-  DragEndEvent,
   DragOverlay,
-  DragStartEvent,
   PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
   closestCenter,
-  DragOverEvent,
+  DragStartEvent,
+  DragEndEvent,
+  DragOverEvent
 } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
-import { TIERS, INITIAL_RESTAURANTS, Restaurant } from './types';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove
+} from '@dnd-kit/sortable';
+import { Restaurant, TIERS, INITIAL_RESTAURANTS } from './types';
 import { checkEXRestrictions } from './utils';
 import { DroppableTier } from './TierComponent';
-import { DraggingRestaurantItem } from './RestaurantItem';
-import { SaveButton } from './SaveButton';
+import { SortableRestaurantItem, DraggingRestaurantItem } from './RestaurantItem';
+import SaveButton from './SaveButton';
+import '../TierList.css';
 
 const TierList: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>(INITIAL_RESTAURANTS);
@@ -133,14 +137,14 @@ const TierList: React.FC = () => {
         // ドロップ可能エリア外でのドロップを防ぐ
         modifiers={[]}
       >
-        <div className="tier-list-vertical" ref={tierListRef}>
-          {TIERS.map((tier) => (
-            <DroppableTier key={tier.name} tier={tier} restaurants={restaurants} />
-          ))}
-        </div>
-        <DragOverlay>
-          {activeRestaurant ? <DraggingRestaurantItem restaurant={activeRestaurant} /> : null}
-        </DragOverlay>
+                  <div className="tier-list-vertical" ref={tierListRef}>
+            {TIERS.map((tier) => (
+              <DroppableTier key={tier.name} tier={tier} restaurants={restaurants} />
+            ))}
+          </div>
+          <DragOverlay>
+            {activeRestaurant ? <DraggingRestaurantItem restaurant={activeRestaurant} /> : null}
+          </DragOverlay>
       </DndContext>
     </div>
   );

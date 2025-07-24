@@ -1,14 +1,19 @@
 import React from 'react';
 import { saveImage } from './utils';
+import '../TierList.css';
 
 interface SaveButtonProps {
   tierListRef: React.RefObject<HTMLDivElement>;
 }
 
-export const SaveButton: React.FC<SaveButtonProps> = ({ tierListRef }) => {
+const SaveButton: React.FC<SaveButtonProps> = ({ tierListRef }) => {
   const handleSaveImage = () => {
     saveImage(tierListRef);
   };
+
+  // iPhoneかどうかを判定
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const buttonText = isIOS ? 'フォトに保存' : '画像として保存';
 
   return (
     <button
@@ -27,7 +32,9 @@ export const SaveButton: React.FC<SaveButtonProps> = ({ tierListRef }) => {
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
       }}
     >
-      画像として保存
+      {buttonText}
     </button>
   );
 };
+
+export default SaveButton;

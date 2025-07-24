@@ -1,7 +1,23 @@
+/* 全体のスタイル */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tier List コンテナ */
 .tier-list-container {
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #000000;
+  min-height: 100vh;
 }
 
 .tier-list {
@@ -97,6 +113,18 @@
   background-color: rgba(255, 107, 107, 0.1);
 }
 
+/* Safe Area対応 */
+.tier-list-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Safe Area対応 */
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
 /* ドラッグアンドドロップの安定性向上 */
 .tier-list-vertical {
   display: flex;
@@ -104,6 +132,9 @@
   gap: 0px;
   min-height: 100vh;
   position: relative;
+  /* Safe Area対応 */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .tier-row {
@@ -178,16 +209,6 @@
   z-index: 2;
 }
 
-.restaurant-item .ramen-red {
-  color: #ff0000;
-  font-weight: 900;
-}
-
-.restaurant-item .ramen-black {
-  color: #111;
-  font-weight: 900;
-}
-
 .restaurant-item:active {
   cursor: grabbing;
   transform: scale(1.05);
@@ -200,6 +221,16 @@
   transform: rotate(5deg) scale(1.05);
   transition: all 0.2s ease;
   opacity: 0.8;
+}
+
+.restaurant-item .ramen-red {
+  color: #ff0000;
+  font-weight: 900;
+}
+
+.restaurant-item .ramen-black {
+  color: #111;
+  font-weight: 900;
 }
 
 .tier-row .restaurant-item {
@@ -284,7 +315,7 @@
   }
 }
 
-/* iPhoneでの安全領域対応 */
+/* iPhoneでのSafe Area対応 */
 @supports (padding: max(0px)) {
   .tier-list-container {
     padding-left: max(20px, env(safe-area-inset-left));
@@ -292,15 +323,31 @@
     padding-top: max(20px, env(safe-area-inset-top));
     padding-bottom: max(20px, env(safe-area-inset-bottom));
   }
+
+  /* 保存ボタンのSafe Area対応 */
+  .save-button {
+    margin-bottom: max(16px, env(safe-area-inset-bottom));
+  }
 }
 
 /* EXの特別なスタイル */
 .tier-row[data-tier="EX"] {
   border-width: 4px;
-  border-style: double;
+  border-style: solid;
   background: linear-gradient(135deg, #FF1493, #FF69B4);
-  box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-  animation: exGlow 2s ease-in-out infinite alternate;
+  box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.tier-row[data-tier="EX"]::before {
+  content: "👑";
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 1.5rem;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .tier-row[data-tier="EX"] .tier-label {
@@ -308,31 +355,46 @@
   font-size: 1.5rem;
   font-weight: 900;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 15px rgba(255, 20, 147, 0.8);
+  box-shadow: 0 2px 8px rgba(255, 20, 147, 0.4);
+  position: relative;
+}
+
+.tier-row[data-tier="EX"] .tier-label::after {
+  content: "★";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  color: #FFD700;
+  font-size: 0.8rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .tier-row[data-tier="EX"] .restaurant-item {
   background: linear-gradient(135deg, #FFD700, #FFA500);
   border: 2px solid #FF1493;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
   font-weight: 900;
   color: #000;
   text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  position: relative;
 }
 
-@keyframes exGlow {
-  0% {
-    box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
-  }
+.tier-row[data-tier="EX"] .restaurant-item::before {
+  content: "⭐";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  font-size: 0.7rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 /* EXのドラッグ制限の視覚的フィードバック */
 .tier-row[data-tier="EX"].drag-over {
-  animation: exGlow 0.5s ease-in-out infinite alternate;
+  background: linear-gradient(135deg, #FF1493, #FF69B4);
   border-color: #FFD700 !important;
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.5);
+  transform: scale(1.01);
+  transition: all 0.3s ease;
 }
 
 /* 三田の特別なスタイル */
@@ -354,4 +416,69 @@
   color: #FF1493;
   font-size: 1.2rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* 保存ボタン関連のスタイル */
+.save-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.preview-button,
+.save-button {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: 2px solid;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.preview-button {
+  background: #4CAF50;
+  color: white;
+  border-color: #45a049;
+}
+
+.preview-button:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.preview-button:disabled {
+  background: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.save-button {
+  background: #ffe600;
+  color: #111;
+  border-color: #ffb800;
+}
+
+.save-button:hover {
+  background: #ffd700;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .save-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preview-button,
+  .save-button {
+    width: 200px;
+  }
 }
