@@ -17,13 +17,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
     <title>Jiro Tier</title>
     <style>
-      /* iPhoneでの安全領域対応 */
+      /* iPhoneでのSafe Area対応 */
       body {
         margin: 0;
         padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         min-height: 100vh;
         -webkit-text-size-adjust: 100%;
         -webkit-tap-highlight-color: transparent;
+        /* Safe Area対応 */
+        padding-top: max(0px, env(safe-area-inset-top));
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
       }
 
       /* タッチ操作の改善 */
@@ -40,6 +45,16 @@
       html, body {
         overflow-x: hidden;
         position: relative;
+      }
+
+      /* iPhoneでのSafe Area対応 */
+      @supports (padding: max(0px)) {
+        body {
+          padding-top: max(0px, env(safe-area-inset-top));
+          padding-bottom: max(0px, env(safe-area-inset-bottom));
+          padding-left: max(0px, env(safe-area-inset-left));
+          padding-right: max(0px, env(safe-area-inset-right));
+        }
       }
     </style>
   </head>
