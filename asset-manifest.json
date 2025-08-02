@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/jiro_tier/static/css/main.d4f6b68b.css",
-    "main.js": "/jiro_tier/static/js/main.80c55659.js",
+    "main.js": "/jiro_tier/static/js/main.6771b1bd.js",
     "index.html": "/jiro_tier/index.html",
     "main.d4f6b68b.css.map": "/jiro_tier/static/css/main.d4f6b68b.css.map",
-    "main.80c55659.js.map": "/jiro_tier/static/js/main.80c55659.js.map"
+    "main.6771b1bd.js.map": "/jiro_tier/static/js/main.6771b1bd.js.map"
   },
   "entrypoints": [
     "static/css/main.d4f6b68b.css",
-    "static/js/main.80c55659.js"
+    "static/js/main.6771b1bd.js"
   ]
 }
