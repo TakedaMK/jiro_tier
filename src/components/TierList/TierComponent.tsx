@@ -35,6 +35,12 @@ export const DroppableTier: React.FC<TierComponentProps> = ({ tier, restaurants 
         position: 'relative', // 位置を相対に
         // ドロップ可能エリアを明確にする
         cursor: isOver && !isEX ? 'pointer' : 'default',
+        // Tier全体をドロップ可能エリアにする
+        backgroundColor: isOver && !isEX ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+        borderRadius: '8px',
+        transition: 'all 0.3s ease',
+        padding: '4px',
+        borderWidth: isOver && !isEX ? '4px' : '3px',
       }}
       data-tier={tier.name}
       data-testid={`tier-${tier.name}`} // テスト用ID
@@ -54,9 +60,7 @@ export const DroppableTier: React.FC<TierComponentProps> = ({ tier, restaurants 
           gap: '8px',
           alignItems: 'flex-start',
           // ドロップ可能エリアを明確にする
-          backgroundColor: isOver && !isEX ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
           borderRadius: '4px',
-          transition: 'background-color 0.2s ease',
         }}
       >
         <SortableContext items={draggableItems} strategy={verticalListSortingStrategy}>
@@ -66,20 +70,7 @@ export const DroppableTier: React.FC<TierComponentProps> = ({ tier, restaurants 
         </SortableContext>
         {/* 空のTierの場合のプレースホルダー（EX以外のみ） */}
         {tierRestaurants.length === 0 && !isEX && (
-          <div
-            style={{
-              width: '100%',
-              height: '40px',
-              border: '2px dashed #ccc',
-              borderRadius: '4px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#999',
-              fontSize: '0.9rem',
-              backgroundColor: isOver ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-            }}
-          >
+          <div className="empty-placeholder">
             ここにドロップ
           </div>
         )}
