@@ -20,6 +20,7 @@ npm start
 - React 18.2.0
 - TypeScript 4.7.4
 - React Scripts 5.0.1
+- firebase
 
 ## 開発コマンド
 

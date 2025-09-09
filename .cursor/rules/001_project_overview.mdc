@@ -53,3 +53,53 @@ alwaysApply: true
 形式は PNG 形式。
 
 --
+
+## ディレクトリ構造
+
+Jproject/
+├── src/
+│ ├── components/ # UI コンポーネント
+│ │ ├── TierList/
+│ │ │ ├── TierList.tsx
+│ │ │ ├── TierSection.tsx
+│ │ │ └── TierList.module.css
+│ │ ├── TierEditDialog/
+│ │ │ ├── TierEditDialog.tsx
+│ │ │ └── TierEditDialog.module.css
+│ │ └── atoms/
+│ │ │ ├── Tenpo.tsx
+│ │ │ ├── PullDown.tsx
+│ │ │ └── Button.tsx
+│ │
+│ ├── hooks/ # カスタムフック
+│ │ └── # カスタムフック
+│ │
+│ ├── services/ # 外部サービス連携
+│ │ ├── getTierList.ts
+│ │ └── editTier.ts
+│ │
+│ ├── lib/ # 設定・初期化
+│ │ └── firebase.ts
+│ │
+│ ├── types/ # 型定義
+│ │ └── index.ts
+│ │
+│ ├── styles/ # グローバルスタイル
+│ │ ├── index.css
+│ │ └── mobile.css
+│ │
+│ ├── App.tsx
+│ └── index.tsx
+│
+├── public/
+│ └── index.html
+│
+├── package-lock.json
+├── package.json
+├── tsconfig.json
+├── .gitignore
+└── README.md
+
+基本的に上記で開発を行います。が、変更の必要があれば機能実装時に提案してください。
+
+--

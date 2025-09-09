@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TierList from './components/TierList';
+import TierList from './components/TierList/TierList';
 
 function App() {
   return (
