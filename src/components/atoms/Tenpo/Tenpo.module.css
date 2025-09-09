@@ -2,9 +2,7 @@
   background-color: #FFD700;
   color: #000000;
   border: none;
-  border-radius: 8px;
-  font-family: sans-serif;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -16,7 +14,7 @@
   line-height: 1.2;
   white-space: nowrap;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tenpo:hover {

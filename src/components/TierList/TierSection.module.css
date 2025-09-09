@@ -1,0 +1,137 @@
+/* TierSectionコンポーネントのスタイル */
+
+.tierSection {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 2px solid;
+  background-color: #000;
+}
+
+/* Tierラベル */
+.tierLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  height: 40px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 6px;
+  margin: 8px;
+  color: #000;
+}
+
+/* 店舗エリア */
+.tenpoArea {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+}
+
+/* 空のメッセージエリア */
+.emptyMessage {
+  flex: 1;
+  min-height: 40px;
+}
+
+/* 各Tierの色定義 */
+.tierSSS {
+  border-color: #FFD700; /* 金色 */
+}
+
+.tierSSS .tierLabel {
+  background-color: #FFD700; /* 金色 */
+}
+
+.tierSS {
+  border-color: #FFFFFF; /* 白色 */
+}
+
+.tierSS .tierLabel {
+  background-color: #FFFFFF; /* 白色 */
+}
+
+.tierS {
+  border-color: #FFB6C1; /* ライトピンク */
+}
+
+.tierS .tierLabel {
+  background-color: #FFB6C1; /* ライトピンク */
+}
+
+.tierAPlus {
+  border-color: #FFA500; /* オレンジ */
+}
+
+.tierAPlus .tierLabel {
+  background-color: #FFA500; /* オレンジ */
+}
+
+.tierA {
+  border-color: #4169E1; /* ロイヤルブルー */
+}
+
+.tierA .tierLabel {
+  background-color: #4169E1; /* ロイヤルブルー */
+  color: #FFFFFF;
+}
+
+.tierAMinus {
+  border-color: #90EE90; /* ライトグリーン */
+}
+
+.tierAMinus .tierLabel {
+  background-color: #90EE90; /* ライトグリーン */
+}
+
+.tierB {
+  border-color: #DDA0DD; /* プラム */
+}
+
+.tierB .tierLabel {
+  background-color: #DDA0DD; /* プラム */
+}
+
+.tierC {
+  border-color: #9370DB; /* ミディアムパープル */
+}
+
+.tierC .tierLabel {
+  background-color: #9370DB; /* ミディアムパープル */
+  color: #FFFFFF;
+}
+
+.tierDefault {
+  border-color: #666666; /* グレー */
+}
+
+.tierDefault .tierLabel {
+  background-color: #666666; /* グレー */
+  color: #FFFFFF;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .tierSection {
+    min-height: 50px;
+    margin-bottom: 6px;
+  }
+
+  .tierLabel {
+    min-width: 60px;
+    height: 35px;
+    font-size: 14px;
+    margin: 6px;
+  }
+
+  .tenpoArea {
+    gap: 6px;
+    padding: 6px;
+  }
+}

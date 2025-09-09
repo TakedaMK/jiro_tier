@@ -1,0 +1,47 @@
+/* TierListコンポーネントのスタイル */
+
+.tierListContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #000;
+  min-height: 100vh;
+}
+
+.title {
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.tierList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .tierListContainer {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tierListContainer {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+}

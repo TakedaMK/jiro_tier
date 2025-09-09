@@ -1,0 +1,35 @@
+/**
+ * 店舗データの型定義
+ * DBの店舗テーブルに対応
+ */
+export interface TenpoData {
+  tenpo_CD: number;        // 店舗コード (PK)
+  tenpo_name: string;      // 店舗名
+  rank_CD: number;         // ランクコード (FK)
+  haishi_flag: number;     // 廃止フラグ (0:有効, 1:廃止)
+}
+
+/**
+ * ランクデータの型定義
+ * DBのランクテーブルに対応
+ */
+export interface RankData {
+  rank_CD: number;         // ランクコード (PK)
+  rank_name: string;       // ランク名 ("SSS", "SS", "S", "A+", "A", "A-", "B", "C")
+}
+
+/**
+ * TierSectionコンポーネントのProps型定義
+ */
+export interface TierSectionProps {
+  rankData: RankData;      // ランク情報
+  tenpos: TenpoData[];     // そのランクに属する店舗の配列（廃止フラグ=0のみ）
+  onTenpoClick: (tenpo_CD: number) => void; // 店舗クリック時のコールバック
+}
+
+/**
+ * TierListコンポーネントのProps型定義
+ */
+export interface TierListProps {
+  onTenpoClick?: (tenpo_CD: number) => void; // 店舗クリック時のコールバック（オプション）
+}
