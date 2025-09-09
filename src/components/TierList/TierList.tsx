@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import TierSection from './TierSection';
 import TierEditDialog from '../TierEditDialog/TierEditDialog';
+import Button from '../atoms/Button/Button';
 import { TierListProps, TenpoData, RankData } from '../../types';
 import { rankMaster, dummyTenpoData, getTenposByRank } from '../../data/dummyData';
+import { useImageSave } from '../../hooks/useImageSave';
 // @ts-ignore
 import styles from './TierList.module.css';
 
@@ -17,6 +19,9 @@ const TierList: React.FC<TierListProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedTenpo, setSelectedTenpo] = useState<TenpoData | null>(null);
   const [selectedRank, setSelectedRank] = useState<RankData | null>(null);
+
+  // 画像保存機能のフック
+  const { saveAsImage } = useImageSave();
 
   // 店舗データから店舗名とTierを取得する関数
   const getTenpoInfo = (tenpo_CD: number) => {
@@ -55,11 +60,28 @@ const TierList: React.FC<TierListProps> = ({
     handleCloseDialog();
   };
 
+  // 画像として保存するハンドラー
+  const handleSaveAsImage = () => {
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+    const filename = `tier-list-${timestamp}.png`;
+    saveAsImage('tier-list-container', filename);
+  };
+
   return (
     <div className={styles.tierListContainer}>
       <h1 className={styles.title}>ラーメン二郎 Tier List</h1>
 
-      <div className={styles.tierList}>
+      {/* 画像保存ボタン */}
+      <div className={styles.saveButtonContainer}>
+        <Button
+          text="画像として保存"
+          onClick={handleSaveAsImage}
+          className={styles.saveButton}
+        />
+      </div>
+
+      {/* 画像保存対象のTierリスト */}
+      <div className={styles.tierList} id="tier-list-container">
         {rankMaster.map((rank) => {
           const tenpos = getTenposByRank(dummyTenpoData, rank.rank_CD);
 
@@ -84,6 +106,7 @@ const TierList: React.FC<TierListProps> = ({
           onSave={handleSaveTier}
         />
       )}
+
     </div>
   );
 };
