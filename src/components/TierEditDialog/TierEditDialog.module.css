@@ -1,0 +1,106 @@
+/* ダイアログの背景オーバーレイ */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ダイアログ本体 */
+.dialog {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+/* ヘッダー部分 */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #000;
+}
+
+/* コンテンツ部分 */
+.content {
+  margin-bottom: 24px;
+}
+
+.tierSection {
+  display: flex;
+  justify-content: center;
+}
+
+/* アクションボタン部分 */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.saveButton {
+  background-color: #ffeb3b !important;
+  border: 1px solid #000 !important;
+  color: #000 !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  font-weight: bold !important;
+  min-width: 80px !important;
+}
+
+.cancelButton {
+  background-color: #ffeb3b !important;
+  border: 1px solid #000 !important;
+  color: #000 !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  font-weight: bold !important;
+  min-width: 80px !important;
+}
+
+/* ホバー効果 */
+.saveButton:hover,
+.cancelButton:hover {
+  background-color: #fdd835 !important;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .dialog {
+    margin: 20px;
+    padding: 20px;
+    min-width: auto;
+    width: calc(100vw - 40px);
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .saveButton,
+  .cancelButton {
+    width: 100% !important;
+  }
+}

@@ -33,3 +33,14 @@ export interface TierSectionProps {
 export interface TierListProps {
   onTenpoClick?: (tenpo_CD: number) => void; // 店舗クリック時のコールバック（オプション）
 }
+
+/**
+ * TierEditDialogコンポーネントのProps型定義
+ */
+export interface TierEditDialogProps {
+  isOpen: boolean;                    // ダイアログの表示状態
+  tenpoName: string;                  // 店舗名
+  currentTier: string;                // 現在のTier
+  onClose: () => void;                // ダイアログを閉じる時のコールバック
+  onSave: (newTier: string) => void;  // Tierを保存する時のコールバック
+}
