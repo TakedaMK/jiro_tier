@@ -1,0 +1,127 @@
+.pullDown {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.label {
+  font-weight: bold;
+  color: #000000;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownButton {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 8px 12px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 16px;
+  color: #000000;
+  transition: all 0.2s ease;
+}
+
+.dropdownButton:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdownButton:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.selectedValue {
+  flex: 1;
+  text-align: center;
+}
+
+.arrow {
+  margin-left: 8px;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.arrowDown {
+  transform: rotate(0deg);
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+.dropdownList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #000000;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdownItem.selected {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.dropdownItem:first-child {
+  border-radius: 0;
+}
+
+.dropdownItem:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .pullDown {
+    gap: 12px;
+  }
+
+  .label {
+    font-size: 18px;
+  }
+
+  .dropdownButton {
+    min-width: 100px;
+    padding: 12px 16px;
+    font-size: 18px;
+  }
+
+  .dropdownItem {
+    padding: 12px 16px;
+    font-size: 18px;
+  }
+}

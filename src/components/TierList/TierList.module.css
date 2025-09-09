@@ -1,0 +1,113 @@
+/* TierListコンポーネントのスタイル */
+
+.tierListContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #000;
+  min-height: 100vh;
+}
+
+.title {
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.saveButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.saveButton {
+  background-color: #4CAF50 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #45a049 !important;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.saveButton:hover {
+  background-color: #45a049 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+
+.tierList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background-color: #000;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* ローディング状態のスタイル */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #FFFFFF;
+  font-size: 18px;
+}
+
+/* エラー状態のスタイル */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #FF6B6B;
+  font-size: 16px;
+  text-align: center;
+}
+
+.retryButton {
+  margin-top: 15px;
+  background-color: #FF6B6B !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FF5252 !important;
+}
+
+.retryButton:hover {
+  background-color: #FF5252 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .tierListContainer {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .saveButtonContainer {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tierListContainer {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .saveButtonContainer {
+    margin-bottom: 10px;
+  }
+}
