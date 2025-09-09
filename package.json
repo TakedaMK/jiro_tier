@@ -29,7 +29,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "seed-data": "ts-node --project tsconfig.seed.json src/scripts/runSeedData.ts"
+    "seed-data": "ts-node --project tsconfig.seed.json src/scripts/runSeedData.ts",
+    "seed-tenpo-data": "ts-node --project tsconfig.seed.json src/scripts/runSeedTenpoData.ts"
   },
   "eslintConfig": {
     "extends": [

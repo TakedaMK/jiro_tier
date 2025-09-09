@@ -4,6 +4,7 @@ import TierEditDialog from '../TierEditDialog/TierEditDialog';
 import Button from '../atoms/Button/Button';
 import { TierListProps, TenpoData, RankData } from '../../types';
 import { getTierListData } from '../../services/getTierList';
+import { updateTenpoTierByName } from '../../services/editTier';
 import { getTenposByRank } from '../../data/dummyData';
 import { useImageSave } from '../../hooks/useImageSave';
 // @ts-ignore
@@ -27,26 +28,31 @@ const TierList: React.FC<TierListProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Tier保存処理のstate管理
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   // 画像保存機能のフック
   const { saveAsImage } = useImageSave();
 
+  // Firestoreからデータを取得する関数
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const { tenpos, ranks } = await getTierListData();
+      setTenpoData(tenpos);
+      setRankData(ranks);
+    } catch (err) {
+      console.error('データの取得に失敗しました:', err);
+      setError('データの取得に失敗しました。ページを再読み込みしてください。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Firestoreからデータを取得するuseEffect
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const { tenpos, ranks } = await getTierListData();
-        setTenpoData(tenpos);
-        setRankData(ranks);
-      } catch (err) {
-        console.error('データの取得に失敗しました:', err);
-        setError('データの取得に失敗しました。ページを再読み込みしてください。');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -78,13 +84,37 @@ const TierList: React.FC<TierListProps> = ({
     setSelectedRank(null);
   };
 
-  // Tierを保存する（現在はコンソールログのみ）
-  const handleSaveTier = (newTier: string) => {
-    if (selectedTenpo) {
-      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier} に変更`);
-      // TODO: ここでDBに保存する処理を実装
+  // Tierを保存する処理
+  const handleSaveTier = async (newTier: string) => {
+    if (!selectedTenpo) {
+      console.error('選択された店舗がありません');
+      return;
     }
-    handleCloseDialog();
+
+    try {
+      // 保存処理開始
+      setIsSaving(true);
+      setSaveError(null);
+
+      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier} に変更中...`);
+
+      // editTierサービスを使用してDBに保存
+      await updateTenpoTierByName(selectedTenpo.tenpo_CD, newTier);
+
+      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier} に変更しました`);
+
+      // 保存成功後、データを再取得して画面を更新
+      await fetchData();
+
+      // ダイアログを閉じる
+      handleCloseDialog();
+
+    } catch (error) {
+      console.error('Tierの保存に失敗しました:', error);
+      setSaveError('Tierの保存に失敗しました。もう一度お試しください。');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // 画像として保存するハンドラー
@@ -160,6 +190,8 @@ const TierList: React.FC<TierListProps> = ({
           currentTier={selectedRank.rank_name}
           onClose={handleCloseDialog}
           onSave={handleSaveTier}
+          isSaving={isSaving}
+          saveError={saveError}
         />
       )}
 

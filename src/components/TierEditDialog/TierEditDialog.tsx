@@ -10,7 +10,9 @@ const TierEditDialog: React.FC<TierEditDialogProps> = ({
   tenpoName,
   currentTier,
   onClose,
-  onSave
+  onSave,
+  isSaving = false,
+  saveError = null
 }) => {
   const [selectedTier, setSelectedTier] = useState(currentTier);
 
@@ -47,18 +49,27 @@ const TierEditDialog: React.FC<TierEditDialogProps> = ({
               onChange={handleTierChange}
             />
           </div>
+
+          {/* 保存エラーメッセージの表示 */}
+          {saveError && (
+            <div className={styles.errorMessage}>
+              <p>{saveError}</p>
+            </div>
+          )}
         </div>
 
         <div className={styles.actions}>
           <Button
-            text="決定"
+            text={isSaving ? "保存中..." : "決定"}
             onClick={handleSave}
             className={styles.saveButton}
+            disabled={isSaving}
           />
           <Button
             text="戻る"
             onClick={onClose}
             className={styles.cancelButton}
+            disabled={isSaving}
           />
         </div>
       </div>

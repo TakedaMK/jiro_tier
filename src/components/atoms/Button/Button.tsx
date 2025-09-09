@@ -6,12 +6,14 @@ interface ButtonProps {
   text: string;
   onClick: () => void;
   className?: string;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
   text,
   onClick,
-  className = ''
+  className = '',
+  disabled = false
 }) => {
   const buttonClass = `${styles.button} ${className}`.trim();
 
@@ -20,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
       className={buttonClass}
       onClick={onClick}
       type="button"
+      disabled={disabled}
     >
       {text}
     </button>

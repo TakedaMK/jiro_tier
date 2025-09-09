@@ -44,6 +44,8 @@ export interface TierEditDialogProps {
   currentTier: string;                // 現在のTier
   onClose: () => void;                // ダイアログを閉じる時のコールバック
   onSave: (newTier: string) => void;  // Tierを保存する時のコールバック
+  isSaving?: boolean;                 // 保存中の状態（オプション）
+  saveError?: string | null;          // 保存エラーメッセージ（オプション）
 }
 
 /**
