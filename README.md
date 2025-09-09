@@ -15,43 +15,6 @@ cd my-app
 npm start
 ```
 
-### 手動構築手順
-
-プロジェクト名にスペースが含まれていたため、手動で React + TypeScript 環境を構築しました。
-
-#### 1. プロジェクト初期化
-
-- プロジェクト名にスペースが含まれていたため、Create React App が使用できませんでした
-- 手動で React + TypeScript 環境を構築しました
-
-#### 2. 設定ファイルの作成
-
-- `package.json`: React + TypeScript の依存関係を定義
-- `tsconfig.json`: TypeScript の設定
-- `public/index.html`: HTML テンプレート
-- `src/index.tsx`: アプリケーションのエントリーポイント
-- `src/App.tsx`: メインコンポーネント
-- `src/index.css`: グローバル CSS
-- `src/App.css`: App コンポーネント用 CSS
-- `.gitignore`: Git 管理から除外するファイルを定義
-
-#### 3. 依存関係のインストール
-
-```bash
-npm install
-```
-
-#### 4. 開発サーバーの起動
-
-```bash
-npm start
-```
-
-#### 5. Git 管理の設定
-
-- `.gitignore`ファイルを作成し、`node_modules/`を除外
-- 不要なファイル（ログ、ビルドファイル、環境変数ファイルなど）も除外
-
 ## 使用技術
 
 - React 18.2.0
