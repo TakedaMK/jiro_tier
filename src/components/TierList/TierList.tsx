@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TierSection from './TierSection';
 import TierEditDialog from '../TierEditDialog/TierEditDialog';
 import Button from '../atoms/Button/Button';
 import { TierListProps, TenpoData, RankData } from '../../types';
-import { rankMaster, dummyTenpoData, getTenposByRank } from '../../data/dummyData';
+import { getTierListData } from '../../services/getTierList';
+import { getTenposByRank } from '../../data/dummyData';
 import { useImageSave } from '../../hooks/useImageSave';
 // @ts-ignore
 import styles from './TierList.module.css';
@@ -20,13 +21,39 @@ const TierList: React.FC<TierListProps> = ({
   const [selectedTenpo, setSelectedTenpo] = useState<TenpoData | null>(null);
   const [selectedRank, setSelectedRank] = useState<RankData | null>(null);
 
+  // Firestoreデータのstate管理
+  const [tenpoData, setTenpoData] = useState<TenpoData[]>([]);
+  const [rankData, setRankData] = useState<RankData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   // 画像保存機能のフック
   const { saveAsImage } = useImageSave();
 
+  // Firestoreからデータを取得するuseEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const { tenpos, ranks } = await getTierListData();
+        setTenpoData(tenpos);
+        setRankData(ranks);
+      } catch (err) {
+        console.error('データの取得に失敗しました:', err);
+        setError('データの取得に失敗しました。ページを再読み込みしてください。');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // 店舗データから店舗名とTierを取得する関数
   const getTenpoInfo = (tenpo_CD: number) => {
-    const tenpo = dummyTenpoData.find(t => t.tenpo_CD === tenpo_CD);
-    const rank = rankMaster.find(r => r.rank_CD === tenpo?.rank_CD);
+    const tenpo = tenpoData.find(t => t.tenpo_CD === tenpo_CD);
+    const rank = rankData.find(r => r.rank_CD === tenpo?.rank_CD);
     return { tenpo, rank };
   };
 
@@ -67,6 +94,35 @@ const TierList: React.FC<TierListProps> = ({
     saveAsImage('tier-list-container', filename);
   };
 
+  // ローディング状態の表示
+  if (isLoading) {
+    return (
+      <div className={styles.tierListContainer}>
+        <h1 className={styles.title}>ラーメン二郎 Tier List</h1>
+        <div className={styles.loadingContainer}>
+          <p>データを読み込み中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // エラー状態の表示
+  if (error) {
+    return (
+      <div className={styles.tierListContainer}>
+        <h1 className={styles.title}>ラーメン二郎 Tier List</h1>
+        <div className={styles.errorContainer}>
+          <p>{error}</p>
+          <Button
+            text="再読み込み"
+            onClick={() => window.location.reload()}
+            className={styles.retryButton}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.tierListContainer}>
       <h1 className={styles.title}>ラーメン二郎 Tier List</h1>
@@ -82,8 +138,8 @@ const TierList: React.FC<TierListProps> = ({
 
       {/* 画像保存対象のTierリスト */}
       <div className={styles.tierList} id="tier-list-container">
-        {rankMaster.map((rank) => {
-          const tenpos = getTenposByRank(dummyTenpoData, rank.rank_CD);
+        {rankData.map((rank) => {
+          const tenpos = getTenposByRank(tenpoData, rank.rank_CD);
 
           return (
             <TierSection
