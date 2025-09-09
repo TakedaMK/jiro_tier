@@ -44,3 +44,36 @@ export interface TierEditDialogProps {
   onClose: () => void;                // ダイアログを閉じる時のコールバック
   onSave: (newTier: string) => void;  // Tierを保存する時のコールバック
 }
+
+/**
+ * Firestore用の店舗データ型定義
+ */
+export interface FirestoreTenpoData {
+  id: string;                         // FirestoreのドキュメントID
+  tenpo_CD: number;                   // 店舗コード
+  tenpo_name: string;                 // 店舗名
+  rank_CD: number;                    // ランクコード
+  haishi_flag: number;                // 廃止フラグ (0:有効, 1:廃止)
+  createdAt: Date;                    // 作成日時
+  updatedAt: Date;                    // 更新日時
+}
+
+/**
+ * Firestore用のランクデータ型定義
+ */
+export interface FirestoreRankData {
+  id: string;                         // FirestoreのドキュメントID
+  rank_CD: number;                    // ランクコード
+  rank_name: string;                  // ランク名
+  display_order: number;              // 表示順序
+  createdAt: Date;                    // 作成日時
+  updatedAt: Date;                    // 更新日時
+}
+
+/**
+ * Firestoreコレクション名の定数
+ */
+export const FIRESTORE_COLLECTIONS = {
+  TENPOS: 'tenpos',                   // 店舗コレクション
+  RANKS: 'ranks'                      // ランクコレクション
+} as const;
