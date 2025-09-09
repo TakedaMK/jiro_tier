@@ -32,7 +32,8 @@ const testTenpoData = {
   tenpo_CD: 44,
   tenpo_name: '朝倉街道',
   rank_CD: 2, // SSランク
-  haishi_flag: 0
+  haishi_flag: 0,
+  display_order: 1
 };
 
 /**

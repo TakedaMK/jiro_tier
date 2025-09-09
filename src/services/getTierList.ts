@@ -26,7 +26,7 @@ export const getTenpoData = async (): Promise<TenpoData[]> => {
     const q = query(
       tenposRef,
       where('haishi_flag', '==', 0), // 廃止フラグが0（有効）の店舗のみ
-      orderBy('tenpo_CD', 'asc')
+      orderBy('display_order', 'asc')
     );
 
     const querySnapshot = await getDocs(q);
@@ -38,7 +38,8 @@ export const getTenpoData = async (): Promise<TenpoData[]> => {
         tenpo_CD: data.tenpo_CD,
         tenpo_name: data.tenpo_name,
         rank_CD: data.rank_CD,
-        haishi_flag: data.haishi_flag
+        haishi_flag: data.haishi_flag,
+        display_order: data.display_order
       });
     });
 

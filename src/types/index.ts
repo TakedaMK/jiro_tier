@@ -7,6 +7,7 @@ export interface TenpoData {
   tenpo_name: string;      // 店舗名
   rank_CD: number;         // ランクコード (FK)
   haishi_flag: number;     // 廃止フラグ (0:有効, 1:廃止)
+  display_order: number;   // 表示順序
 }
 
 /**
@@ -54,6 +55,7 @@ export interface FirestoreTenpoData {
   tenpo_name: string;                 // 店舗名
   rank_CD: number;                    // ランクコード
   haishi_flag: number;                // 廃止フラグ (0:有効, 1:廃止)
+  display_order: number;              // 表示順序
   createdAt: Date;                    // 作成日時
   updatedAt: Date;                    // 更新日時
 }
