@@ -4,7 +4,7 @@ import TierEditDialog from '../TierEditDialog/TierEditDialog';
 import Button from '../atoms/Button/Button';
 import { TierListProps, TenpoData, RankData } from '../../types';
 import { getTierListData } from '../../services/getTierList';
-import { updateTenpoTierByName } from '../../services/editTier';
+import { updateTenpoTierAndDisplayOrderByName } from '../../services/editTier';
 import { getTenposByRank } from '../../data/dummyData';
 import { useImageSave } from '../../hooks/useImageSave';
 // @ts-ignore
@@ -84,8 +84,8 @@ const TierList: React.FC<TierListProps> = ({
     setSelectedRank(null);
   };
 
-  // Tierを保存する処理
-  const handleSaveTier = async (newTier: string) => {
+  // Tierと表示順序を保存する処理
+  const handleSaveTierAndDisplayOrder = async (newTier: string, newDisplayOrder: number) => {
     if (!selectedTenpo) {
       console.error('選択された店舗がありません');
       return;
@@ -96,12 +96,12 @@ const TierList: React.FC<TierListProps> = ({
       setIsSaving(true);
       setSaveError(null);
 
-      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier} に変更中...`);
+      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier}、表示順序を ${newDisplayOrder} に変更中...`);
 
       // editTierサービスを使用してDBに保存
-      await updateTenpoTierByName(selectedTenpo.tenpo_CD, newTier);
+      await updateTenpoTierAndDisplayOrderByName(selectedTenpo.tenpo_CD, newTier, newDisplayOrder);
 
-      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier} に変更しました`);
+      console.log(`店舗 ${selectedTenpo.tenpo_name} のTierを ${newTier}、表示順序を ${newDisplayOrder} に変更しました`);
 
       // 保存成功後、データを再取得して画面を更新
       await fetchData();
@@ -110,8 +110,8 @@ const TierList: React.FC<TierListProps> = ({
       handleCloseDialog();
 
     } catch (error) {
-      console.error('Tierの保存に失敗しました:', error);
-      setSaveError('Tierの保存に失敗しました。もう一度お試しください。');
+      console.error('Tierと表示順序の保存に失敗しました:', error);
+      setSaveError('Tierと表示順序の保存に失敗しました。もう一度お試しください。');
     } finally {
       setIsSaving(false);
     }
@@ -188,12 +188,16 @@ const TierList: React.FC<TierListProps> = ({
           isOpen={isDialogOpen}
           tenpoName={selectedTenpo.tenpo_name}
           currentTier={selectedRank.rank_name}
+          currentDisplayOrder={selectedTenpo.display_order}
           onClose={handleCloseDialog}
-          onSave={handleSaveTier}
+          onSave={handleSaveTierAndDisplayOrder}
           isSaving={isSaving}
           saveError={saveError}
+          tenpoData={tenpoData}
+          rankData={rankData}
         />
       )}
+
 
     </div>
   );

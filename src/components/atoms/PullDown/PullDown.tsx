@@ -7,6 +7,7 @@ interface PullDownProps {
   initialValue: string;
   onChange: (value: string) => void;
   className?: string;
+  options?: string[]; // カスタムオプション（表示順序用）
 }
 
 const TIER_OPTIONS = [
@@ -24,7 +25,8 @@ const PullDown: React.FC<PullDownProps> = ({
   label,
   initialValue,
   onChange,
-  className = ''
+  className = '',
+  options
 }) => {
   const [selectedValue, setSelectedValue] = useState(initialValue);
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +42,9 @@ const PullDown: React.FC<PullDownProps> = ({
   };
 
   const pullDownClass = `${styles.pullDown} ${className}`.trim();
+
+  // カスタムオプションが指定されている場合はそれを使用、そうでなければTIER_OPTIONSを使用
+  const displayOptions = options || TIER_OPTIONS;
 
   return (
     <div className={pullDownClass}>
@@ -58,7 +63,7 @@ const PullDown: React.FC<PullDownProps> = ({
 
         {isOpen && (
           <div className={styles.dropdownList}>
-            {TIER_OPTIONS.map((option) => (
+            {displayOptions.map((option) => (
               <button
                 key={option}
                 className={`${styles.dropdownItem} ${selectedValue === option ? styles.selected : ''}`}

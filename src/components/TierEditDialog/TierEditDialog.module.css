@@ -46,6 +46,12 @@
 .tierSection {
   display: flex;
   justify-content: center;
+  margin-bottom: 16px;
+}
+
+.displayOrderSection {
+  display: flex;
+  justify-content: center;
 }
 
 /* エラーメッセージ */
