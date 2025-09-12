@@ -124,14 +124,6 @@ const TierList: React.FC<TierListProps> = ({
     saveAsImage('tier-list-container', filename);
   };
 
-  // ボタンテキストを動的に決定
-  const getButtonText = () => {
-    if (isMobileDevice && isWebShareSupported) {
-      return '画像を共有';
-    }
-    return '画像として保存';
-  };
-
   // ローディング状態の表示
   if (isLoading) {
     return (
@@ -168,7 +160,7 @@ const TierList: React.FC<TierListProps> = ({
       {/* 画像保存ボタン */}
       <div className={styles.saveButtonContainer}>
         <Button
-          text={getButtonText()}
+          text={"画像として保存"}
           onClick={handleSaveAsImage}
           className={styles.saveButton}
         />
