@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 // @ts-ignore
 import styles from './PullDown.module.css';
 
@@ -8,6 +8,8 @@ interface PullDownProps {
   onChange: (value: string) => void;
   className?: string;
   options?: string[]; // カスタムオプション（表示順序用）
+  isOpen?: boolean; // 外部からの開閉制御
+  onToggle?: () => void; // 開閉時のコールバック
 }
 
 const TIER_OPTIONS = [
@@ -26,20 +28,60 @@ const PullDown: React.FC<PullDownProps> = ({
   initialValue,
   onChange,
   className = '',
-  options
+  options,
+  isOpen: externalIsOpen,
+  onToggle
 }) => {
   const [selectedValue, setSelectedValue] = useState(initialValue);
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 外部制御がある場合はそれを使用、なければ内部状態を使用
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
 
   const handleSelect = (value: string) => {
     setSelectedValue(value);
     onChange(value);
-    setIsOpen(false);
+    // 外部制御がある場合はonToggleを呼び出し、なければ内部状態を更新
+    if (externalIsOpen !== undefined && onToggle) {
+      onToggle();
+    } else {
+      setInternalIsOpen(false);
+    }
   };
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    // 外部制御がある場合はonToggleを呼び出し、なければ内部状態を更新
+    if (externalIsOpen !== undefined && onToggle) {
+      onToggle();
+    } else {
+      setInternalIsOpen(!internalIsOpen);
+    }
   };
+
+  // 外側クリック時の処理
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        // プルダウンが開いている場合のみ閉じる
+        if (isOpen) {
+          if (externalIsOpen !== undefined && onToggle) {
+            onToggle();
+          } else {
+            setInternalIsOpen(false);
+          }
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, externalIsOpen, onToggle]);
 
   const pullDownClass = `${styles.pullDown} ${className}`.trim();
 
@@ -47,7 +89,7 @@ const PullDown: React.FC<PullDownProps> = ({
   const displayOptions = options || TIER_OPTIONS;
 
   return (
-    <div className={pullDownClass}>
+    <div className={pullDownClass} ref={dropdownRef}>
       <label className={styles.label}>{label}</label>
       <div className={styles.dropdownContainer}>
         <button

@@ -26,6 +26,9 @@ const TierEditDialog: React.FC<ExtendedTierEditDialogProps> = ({
   const [selectedTier, setSelectedTier] = useState(currentTier);
   const [selectedDisplayOrder, setSelectedDisplayOrder] = useState(currentDisplayOrder.toString());
 
+  // プルダウンの開閉状態を一元管理
+  const [openDropdown, setOpenDropdown] = useState<'tier' | 'displayOrder' | null>(null);
+
   // 表示順序の計算
   const { displayOrderOptions } = useDisplayOrder(
     tenpoData,
@@ -57,6 +60,15 @@ const TierEditDialog: React.FC<ExtendedTierEditDialogProps> = ({
     setSelectedDisplayOrder(newDisplayOrder);
   };
 
+  // プルダウンの開閉制御
+  const handleTierDropdownToggle = () => {
+    setOpenDropdown(openDropdown === 'tier' ? null : 'tier');
+  };
+
+  const handleDisplayOrderDropdownToggle = () => {
+    setOpenDropdown(openDropdown === 'displayOrder' ? null : 'displayOrder');
+  };
+
   const handleSave = () => {
     const newDisplayOrder = parseInt(selectedDisplayOrder, 10);
     onSave(selectedTier, newDisplayOrder);
@@ -85,6 +97,8 @@ const TierEditDialog: React.FC<ExtendedTierEditDialogProps> = ({
               label="Tier"
               initialValue={currentTier}
               onChange={handleTierChange}
+              isOpen={openDropdown === 'tier'}
+              onToggle={handleTierDropdownToggle}
             />
           </div>
 
@@ -94,6 +108,8 @@ const TierEditDialog: React.FC<ExtendedTierEditDialogProps> = ({
               initialValue={selectedDisplayOrder}
               onChange={handleDisplayOrderChange}
               options={displayOrderStringOptions}
+              isOpen={openDropdown === 'displayOrder'}
+              onToggle={handleDisplayOrderDropdownToggle}
             />
           </div>
 
