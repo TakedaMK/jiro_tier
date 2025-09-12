@@ -28,6 +28,7 @@ npm start
 - `npm run build`: プロダクションビルドを作成
 - `npm test`: テストを実行
 - `npm run eject`: Create React App の設定を展開（非推奨）
+- `npm run seed-tenpo-data` : 店舗マスタを Firestore Database に投入
 
 ## プロジェクト構造
 

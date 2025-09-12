@@ -326,8 +326,8 @@ export const seedTenpoData = async (): Promise<void> => {
     const tenposCollection = collection(db, FIRESTORE_COLLECTIONS.TENPOS);
 
     for (const tenpo of testTenpoData) {
-      // ドキュメントIDをtenpo_CDと同じにする
-      const docRef = doc(tenposCollection, tenpo.tenpo_CD.toString());
+      // ドキュメントIDをtenpo_nameと同じにする
+      const docRef = doc(tenposCollection, tenpo.tenpo_name.toString());
 
       const tenpoData = {
         tenpo_CD: tenpo.tenpo_CD,
