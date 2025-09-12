@@ -3,8 +3,53 @@ import { useCallback } from 'react';
 /**
  * Tierリストを画像として保存するためのカスタムフック
  * スマートフォン（iPhone）での利用を前提とした実装
+ * Web Share APIを使用してより直接的な共有機能を提供
  */
 export const useImageSave = () => {
+  /**
+   * デバイスがWeb Share APIをサポートしているかチェック
+   */
+  const isWebShareSupported = useCallback(() => {
+    return typeof navigator !== 'undefined' &&
+           'share' in navigator &&
+           'canShare' in navigator;
+  }, []);
+
+  /**
+   * モバイルデバイスかどうかを判定
+   */
+  const isMobileDevice = useCallback(() => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }, []);
+
+  /**
+   * Web Share APIを使用して画像を共有する関数
+   * @param blob - 共有する画像のBlob
+   * @param filename - ファイル名
+   */
+  const shareImage = useCallback(async (blob: Blob, filename: string) => {
+    if (!isWebShareSupported()) {
+      return false;
+    }
+
+    try {
+      const file = new File([blob], filename, { type: 'image/png' });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: 'ラーメン二郎 Tier List',
+          text: '私のラーメン二郎 Tier Listです！',
+          files: [file]
+        });
+        return true;
+      }
+    } catch (error) {
+      console.log('Web Share APIでの共有に失敗:', error);
+    }
+
+    return false;
+  }, [isWebShareSupported]);
+
   /**
    * Tierリストを画像として保存する関数
    * @param elementId - 保存対象の要素のID
@@ -35,16 +80,23 @@ export const useImageSave = () => {
       });
 
       // キャンバスをBlobに変換
-      canvas.toBlob((blob) => {
+      canvas.toBlob(async (blob) => {
         if (!blob) {
           console.error('画像の生成に失敗しました');
           return;
         }
 
-        // ダウンロード用のURLを作成
-        const url = URL.createObjectURL(blob);
+        // モバイルデバイスかつWeb Share APIが利用可能な場合、共有機能を使用
+        if (isMobileDevice() && isWebShareSupported()) {
+          const shared = await shareImage(blob, filename);
+          if (shared) {
+            console.log('Web Share APIで画像を共有しました:', filename);
+            return;
+          }
+        }
 
-        // ダウンロード用のリンクを作成
+        // フォールバック: 従来のダウンロード方式
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
@@ -108,5 +160,9 @@ export const useImageSave = () => {
     }
   }, []);
 
-  return { saveAsImage };
+  return {
+    saveAsImage,
+    isWebShareSupported: isWebShareSupported(),
+    isMobileDevice: isMobileDevice()
+  };
 };
