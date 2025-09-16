@@ -99,7 +99,7 @@ const testTenpoData = [
   {
     "tenpo_CD": 14,
     "tenpo_name": "めじろ台",
-    "rank_CD": 5,
+    "rank_CD": 4,
     "haishi_flag": 0,
     "display_order": 4
   },
@@ -162,14 +162,14 @@ const testTenpoData = [
   {
     "tenpo_CD": 23,
     "tenpo_name": "ひばりヶ丘",
-    "rank_CD": 2,
+    "rank_CD": 1,
     "haishi_flag": 0,
     "display_order": 3
   },
   {
     "tenpo_CD": 24,
     "tenpo_name": "栃木街道",
-    "rank_CD": 5,
+    "rank_CD": 4,
     "haishi_flag": 0,
     "display_order": 8
   },
@@ -253,7 +253,7 @@ const testTenpoData = [
   {
     "tenpo_CD": 36,
     "tenpo_name": "越谷",
-    "rank_CD": 7,
+    "rank_CD": 6,
     "haishi_flag": 0,
     "display_order": 4
   },
