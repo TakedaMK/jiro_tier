@@ -312,6 +312,13 @@ const testTenpoData = [
     "rank_CD": 3,
     "haishi_flag": 0,
     "display_order": 6
+  },
+  {
+    "tenpo_CD": 45,
+    "tenpo_name": "名古屋大曾根",
+    "rank_CD": 4,
+    "haishi_flag": 0,
+    "display_order": 100
   }
 ];
 
@@ -370,6 +377,43 @@ export const verifyTenpoData = async (): Promise<void> => {
     console.log('店舗データの確認が完了しました！');
   } catch (error) {
     console.error('店舗データの確認でエラーが発生しました:', error);
+    throw error;
+  }
+};
+
+/**
+ * 単一の店舗データをFirestoreに追加する関数
+ * @param tenpoData 追加する店舗データ
+ */
+export const addSingleTenpoData = async (tenpoData: {
+  tenpo_CD: number;
+  tenpo_name: string;
+  rank_CD: number;
+  haishi_flag: number;
+  display_order: number;
+}): Promise<void> => {
+  try {
+    console.log(`店舗データの追加を開始します: ${tenpoData.tenpo_name}`);
+
+    const tenposCollection = collection(db, FIRESTORE_COLLECTIONS.TENPOS);
+    
+    // ドキュメントIDをtenpo_nameと同じにする
+    const docRef = doc(tenposCollection, tenpoData.tenpo_name.toString());
+
+    const data = {
+      tenpo_CD: tenpoData.tenpo_CD,
+      tenpo_name: tenpoData.tenpo_name,
+      rank_CD: tenpoData.rank_CD,
+      haishi_flag: tenpoData.haishi_flag,
+      display_order: tenpoData.display_order,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    await setDoc(docRef, data);
+    console.log(`店舗データを追加しました: ${tenpoData.tenpo_name} (ID: ${tenpoData.tenpo_CD})`);
+  } catch (error) {
+    console.error('店舗データの追加でエラーが発生しました:', error);
     throw error;
   }
 };
