@@ -20,7 +20,7 @@ const TIER_OPTIONS = [
   'A',
   'A-',
   'B',
-  'C'
+  '未訪問'
 ];
 
 const PullDown: React.FC<PullDownProps> = ({
