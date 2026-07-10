@@ -49,7 +49,7 @@ export const updateTenpoTier = async (
 
 /**
  * ランク名からランクコードを取得する
- * @param rankName ランク名（"SSS", "SS", "S", "A+", "A", "A-", "B", "C"）
+ * @param rankName ランク名（"SSS", "SS", "S", "A+", "A", "A-", "B", "未訪問"）
  * @returns Promise<number> ランクコード
  */
 export const getRankCodeByName = async (rankName: string): Promise<number> => {

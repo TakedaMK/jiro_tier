@@ -10,9 +10,9 @@ const addSingleTenpo = async () => {
 
     // 追加する店舗データ（ここを編集して使用）
     const tenpoData = {
-      tenpo_CD: 45,
-      tenpo_name: "名古屋大曾根",
-      rank_CD: 4,
+      tenpo_CD: 46,
+      tenpo_name: "沖縄",
+      rank_CD: 8,
       haishi_flag: 0,
       display_order: 100
     };

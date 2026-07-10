@@ -16,7 +16,7 @@ export interface TenpoData {
  */
 export interface RankData {
   rank_CD: number;         // ランクコード (PK)
-  rank_name: string;       // ランク名 ("SSS", "SS", "S", "A+", "A", "A-", "B", "C")
+  rank_name: string;       // ランク名 ("SSS", "SS", "S", "A+", "A", "A-", "B", "未訪問")
 }
 
 /**

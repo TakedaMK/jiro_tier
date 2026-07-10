@@ -12,7 +12,7 @@ export const rankMaster: RankData[] = [
   { rank_CD: 5, rank_name: "A" },
   { rank_CD: 6, rank_name: "A-" },
   { rank_CD: 7, rank_name: "B" },
-  { rank_CD: 8, rank_name: "C" }
+  { rank_CD: 8, rank_name: "未訪問" }
 ];
 
 /**
